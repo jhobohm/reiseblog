@@ -1,19 +1,63 @@
 import Link from "next/link";
 import Image from "next/image";
-import { posts } from "../data/posts";
 import MapSection from "../components/MapSection";
+import { client } from "../sanity/lib/client";
+import { POSTS_QUERY, MAP_POSTS_QUERY } from "../sanity/lib/queries";
 
-export default function Home() {
-  const feedPosts = [...posts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-  );
-  const currentPost = feedPosts[0];
-  const kindLabels: Record<string, string> = {
-   text: "Text",
-   audio: "Audio",
-   photo: "Foto",
-   still: "Stiller Moment",
+type SanityImage = {
+  asset?: {
+    _id?: string;
+    url?: string;
   };
+};
+
+type Post = {
+  _id: string;
+  title: string;
+  slug: string;
+  kind?: string;
+  date: string;
+  location?: string;
+  excerpt?: string;
+  content?: string;
+  coords?: {
+    lat: number;
+    lng: number;
+  };
+  audio?: string;
+  audioTitle?: string;
+  images?: SanityImage[];
+  transcriptSegments?: {
+    time: number;
+    text: string;
+  }[];
+};
+
+type MapPost = {
+  _id: string;
+  title: string;
+  date: string;
+  location?: string;
+  slug?: string;
+  coords: {
+    lat: number;
+    lng: number;
+  };
+};
+
+const kindLabels: Record<string, string> = {
+  text: "Text",
+  audio: "Audio",
+  photo: "Foto",
+  still: "Stiller Moment",
+};
+
+export default async function Home() {
+  const posts: Post[] = await client.fetch(POSTS_QUERY);
+  const mapPosts: MapPost[] = await client.fetch(MAP_POSTS_QUERY);
+
+  const currentPost = posts[0];
+
   return (
     <main className="container-page">
       <section className="hero">
@@ -31,7 +75,7 @@ export default function Home() {
           Die Karte ist das Herzstück dieser Reise. Jeder Punkt führt zu einem
           Moment, jeder Abschnitt zu einem neuen Kapitel.
         </p>
-        <MapSection />
+        <MapSection posts={mapPosts} />
       </section>
 
       <section>
@@ -42,44 +86,68 @@ export default function Home() {
         </p>
 
         <div className="feed">
-          {feedPosts.map((post) => (
-            <article key={post.id} id={`post-${post.id}`} className={`post-card ${ post.id === currentPost.id ? "post-card-current" : ""}`}
->
-              {post.images?.length > 0 && (
-               <div>
-                <div className="post-image-wrap">
-                 <Image src={post.images[0]} alt={post.title} width={1200} height={800} className="post-image"/>
-                </div>
+          {posts.map((post) => (
+            <article
+              key={post._id}
+              id={`post-${post._id}`}
+              className={`post-card ${
+                post.kind === "still" ? "post-card-still" : ""
+              } ${currentPost && post._id === currentPost._id ? "post-card-current" : ""}`}
+            >
+              {post.images?.[0]?.asset?.url && (
+                <div>
+                  <div className="post-image-wrap">
+                    <Image
+                      src={post.images[0].asset.url}
+                      alt={post.title}
+                      width={1200}
+                      height={800}
+                      className="post-image"
+                    />
+                  </div>
 
-                {post.images.length > 1 && (
-                 <div className="post-thumbs">
-                  {post.images.slice(1, 4).map((img, index) => (
-                   <div key={index} className="post-thumb-wrap">
-                    <Image src={img} alt={`${post.title} ${index + 2}`} width={300} height={220} className="post-thumb" />
-                   </div>
-                 ))}
-               </div>
-               )}
-             </div>
-             )}
+                  {post.images.length > 1 && (
+                    <div className="post-thumbs">
+                      {post.images.slice(1, 4).map((img, index) => (
+                        <div key={index} className="post-thumb-wrap">
+                          {img.asset?.url && (
+                            <Image
+                              src={img.asset.url}
+                              alt={`${post.title} ${index + 2}`}
+                              width={300}
+                              height={220}
+                              className="post-thumb"
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               <div>
-               <div className="post-topline">
-                <span className={`post-kind post-kind-${post.kind}`}>
-                  {kindLabels[post.kind] ?? "Beitrag"}
-                </span>
-                <p className="post-meta">
-                  {post.location} · {post.date}
-                </p>
-               </div>
-               {post.id === currentPost.id && (
-                 <div className="current-label">Aktueller Standort</div>
-              )}
+                <div className="post-topline">
+                  {post.kind && (
+                    <span className={`post-kind post-kind-${post.kind}`}>
+                      {kindLabels[post.kind] ?? "Beitrag"}
+                    </span>
+                  )}
+
+                  <p className="post-meta">
+                    {post.location} · {post.date}
+                  </p>
+                </div>
+
+                {currentPost && post._id === currentPost._id && (
+                  <div className="current-label">Aktueller Standort</div>
+                )}
+
                 <h3 className="post-title">
                   <Link href={`/posts/${post.slug}`}>{post.title}</Link>
                 </h3>
 
-                <p className="post-excerpt">{post.text}</p>
+                <p className="post-excerpt">{post.excerpt}</p>
 
                 <Link href={`/posts/${post.slug}`} className="post-link">
                   Beitrag lesen

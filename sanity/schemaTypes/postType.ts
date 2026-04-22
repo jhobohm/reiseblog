@@ -63,7 +63,25 @@ export const postType = defineType({
       name: "content",
       title: "Inhalt",
       type: "text",
-      rows: 12,
+      rows: 14,
+    }),
+
+    defineField({
+      name: "coords",
+      title: "Koordinaten",
+      type: "object",
+      fields: [
+        defineField({
+          name: "lat",
+          title: "Breitengrad",
+          type: "number",
+        }),
+        defineField({
+          name: "lng",
+          title: "Längengrad",
+          type: "number",
+        }),
+      ],
     }),
 
     defineField({
@@ -75,8 +93,11 @@ export const postType = defineType({
 
     defineField({
       name: "audio",
-      title: "Audio-Datei (URL)",
-      type: "string",
+      title: "Audio-Datei",
+      type: "file",
+      options: {
+        accept: "audio/*",
+      },
     }),
 
     defineField({
@@ -84,7 +105,44 @@ export const postType = defineType({
       title: "Audiotitel",
       type: "string",
     }),
+
+    defineField({
+      name: "transcriptSegments",
+      title: "Transkript-Abschnitte",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "time",
+              title: "Zeit in Sekunden",
+              type: "number",
+            }),
+            defineField({
+              name: "text",
+              title: "Text",
+              type: "text",
+              rows: 3,
+            }),
+          ],
+          preview: {
+            select: {
+              time: "time",
+              text: "text",
+            },
+            prepare({ time, text }) {
+              return {
+                title: `${time ?? 0}s`,
+                subtitle: text,
+              };
+            },
+          },
+        },
+      ],
+    }),
   ],
+
   preview: {
     select: {
       title: "title",

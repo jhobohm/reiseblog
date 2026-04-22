@@ -10,7 +10,7 @@ type TranscriptSegment = {
 type AudioBlockProps = {
   src: string;
   title?: string;
-  transcriptSegments?: TranscriptSegment[];
+  transcriptSegments?: TranscriptSegment[] | null;
 };
 
 function formatTime(seconds: number) {
@@ -25,8 +25,9 @@ function formatTime(seconds: number) {
 export default function AudioBlock({
   src,
   title,
-  transcriptSegments = [],
+  transcriptSegments,
 }: AudioBlockProps) {
+  const safeTranscriptSegments = transcriptSegments ?? [];
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
@@ -119,18 +120,18 @@ export default function AudioBlock({
     duration > 0 ? Math.min((currentTime / duration) * 100, 100) : 0;
 
   const activeSegmentIndex = useMemo(() => {
-    if (!transcriptSegments.length) return -1;
+    if (!safeTranscriptSegments.length) return -1;
 
-    for (let i = 0; i < transcriptSegments.length; i++) {
-      const current = transcriptSegments[i];
-      const next = transcriptSegments[i + 1];
+    for (let i = 0; i < safeTranscriptSegments.length; i++) {
+      const current = safeTranscriptSegments[i];
+      const next = safeTranscriptSegments[i + 1];
 
       if (!next && currentTime >= current.time) return i;
       if (currentTime >= current.time && currentTime < next.time) return i;
     }
 
     return -1;
-  }, [currentTime, transcriptSegments]);
+  }, [currentTime, safeTranscriptSegments]);
 
   return (
     <section className="audio-card">
@@ -189,19 +190,18 @@ export default function AudioBlock({
         </div>
       </div>
 
-      {transcriptSegments.length > 0 && (
+      {safeTranscriptSegments.length > 0 && (
         <details className="audio-transcript" open>
           <summary>Transkript anzeigen</summary>
 
           <div className="audio-transcript-list">
-            {transcriptSegments.map((segment, index) => (
+            {safeTranscriptSegments.map((segment, index) => (
               <button
                 key={index}
                 type="button"
                 onClick={() => jumpToTime(segment.time)}
-                className={`audio-transcript-segment ${
-                  index === activeSegmentIndex ? "is-active" : ""
-                }`}
+                className={`audio-transcript-segment ${index === activeSegmentIndex ? "is-active" : ""
+                  }`}
               >
                 <span className="audio-transcript-time">
                   {formatTime(segment.time)}
