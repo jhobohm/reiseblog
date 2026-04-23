@@ -11,11 +11,12 @@ export const POSTS_QUERY = groq`
     excerpt,
     content,
     coords,
- audio{
-  asset->{
-    url
-  }
-},   audioTitle,
+    audio{
+      asset->{
+        url
+      }
+    },
+    audioTitle,
     images[]{
       asset->{
         _id,
@@ -49,10 +50,10 @@ export const POST_BY_SLUG_QUERY = groq`
     content,
     coords,
     audio{
-     asset->{
-      url
-     }
-    },    
+      asset->{
+        url
+      }
+    },
     audioTitle,
     images[]{
       asset->{

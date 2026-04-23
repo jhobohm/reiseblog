@@ -3,6 +3,7 @@ import Image from "next/image";
 import MapSection from "../components/MapSection";
 import { client } from "../sanity/lib/client";
 import { POSTS_QUERY, MAP_POSTS_QUERY } from "../sanity/lib/queries";
+import type { Post, MapPost } from "../sanity/lib/types";
 
 type SanityImage = {
   asset?: {
@@ -11,39 +12,6 @@ type SanityImage = {
   };
 };
 
-type Post = {
-  _id: string;
-  title: string;
-  slug: string;
-  kind?: string;
-  date: string;
-  location?: string;
-  excerpt?: string;
-  content?: string;
-  coords?: {
-    lat: number;
-    lng: number;
-  };
-  audio?: string;
-  audioTitle?: string;
-  images?: SanityImage[];
-  transcriptSegments?: {
-    time: number;
-    text: string;
-  }[];
-};
-
-type MapPost = {
-  _id: string;
-  title: string;
-  date: string;
-  location?: string;
-  slug?: string;
-  coords: {
-    lat: number;
-    lng: number;
-  };
-};
 
 const kindLabels: Record<string, string> = {
   text: "Text",

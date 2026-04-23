@@ -4,38 +4,12 @@ import { client } from "../../../sanity/lib/client";
 import { POST_BY_SLUG_QUERY } from "../../../sanity/lib/queries";
 import PostGallery from "../../../components/PostGallery";
 import AudioBlock from "../../../components/AudioBlock";
+import type { Post } from "../../../sanity/lib/types";
 
 type PageProps = {
   params: Promise<{
     id: string;
   }>;
-};
-
-type Post = {
-  _id: string;
-  title: string;
-  slug: string;
-  kind?: string;
-  date: string;
-  location?: string;
-  excerpt?: string;
-  content?: string;
-  audio?: {
-    asset?: {
-      url?: string;
-    };
-  };
-  audioTitle?: string;
-  images?: {
-    asset?: {
-      _id?: string;
-      url?: string;
-    };
-  }[];
-  transcriptSegments?: {
-    time: number;
-    text: string;
-  }[];
 };
 
 export default async function PostPage({ params }: PageProps) {

@@ -2,18 +2,8 @@
 
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
 import L from "leaflet";
+import type { MapPost } from "../sanity/lib/types";
 
-type MapPost = {
-  _id: string;
-  title: string;
-  date: string;
-  location?: string;
-  slug?: string;
-  coords: {
-    lat: number;
-    lng: number;
-  };
-};
 
 type RouteMapProps = {
   posts: MapPost[];
