@@ -1,3 +1,5 @@
+import type { PortableTextBlock } from "@portabletext/react";
+
 export type SanityImage = {
   asset?: {
     _id?: string;
@@ -18,7 +20,7 @@ export type Post = {
   date: string;
   location?: string;
   excerpt?: string;
-  content?: string;
+  content?: PortableTextBlock[] | null;
   coords?: {
     lat: number;
     lng: number;
