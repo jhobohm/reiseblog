@@ -5,6 +5,7 @@ import { POST_BY_SLUG_QUERY } from "../../../sanity/lib/queries";
 import PostGallery from "../../../components/PostGallery";
 import AudioBlock from "../../../components/AudioBlock";
 import type { Post } from "../../../sanity/lib/types";
+import RichText from "../../../components/RichText";
 
 type PageProps = {
   params: Promise<{
@@ -68,7 +69,9 @@ export default async function PostPage({ params }: PageProps) {
           />
         )}
 
-        <div className="detail-content">{post.content}</div>
+        <div className="detail-content">
+          <RichText value={post.content} />
+        </div>
       </article>
     </main>
   );

@@ -32,8 +32,8 @@ export default async function Home() {
         <p className="hero-kicker">Reisetagebuch</p>
         <h1 className="hero-title">Zwischen Aufbruch, Straße und Stille.</h1>
         <p className="hero-text">
-          Eine Reise von Ostdeutschland nach Osten. Orte werden zu Kapiteln,
-          Stimmen zu Erinnerungen und die Route erzählt die Geschichte.
+          Eine fortlaufende Reise zwischen Aufbruch und Ankunft. Die Route wächst mit
+          jedem Ort, und jeder Eintrag wird zu einem Kapitel dieses Weges.
         </p>
       </section>
 
@@ -58,9 +58,8 @@ export default async function Home() {
             <article
               key={post._id}
               id={`post-${post._id}`}
-              className={`post-card ${
-                post.kind === "still" ? "post-card-still" : ""
-              } ${currentPost && post._id === currentPost._id ? "post-card-current" : ""}`}
+              className={`post-card ${post.kind === "still" ? "post-card-still" : ""
+                } ${currentPost && post._id === currentPost._id ? "post-card-current" : ""}`}
             >
               {post.images?.[0]?.asset?.url && (
                 <div>

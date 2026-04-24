@@ -62,8 +62,8 @@ export const postType = defineType({
     defineField({
       name: "content",
       title: "Inhalt",
-      type: "text",
-      rows: 14,
+      type: "array",
+      of: [{ type: "block" }],
     }),
 
     defineField({
