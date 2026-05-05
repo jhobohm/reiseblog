@@ -802,6 +802,228 @@ img {
   line-height: 1.85;
 }
 
+.feed {
+  display: grid;
+  gap: 34px;
+}
+
+.feed-entry {
+  display: grid;
+  grid-template-columns: 86px 1fr;
+  gap: 22px;
+  scroll-margin-top: 32px;
+}
+
+.feed-date {
+  padding-top: 28px;
+  color: var(--muted);
+  text-align: right;
+}
+
+.feed-date-day {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  line-height: 0.9;
+  color: var(--terracotta);
+}
+
+.feed-date-month,
+.feed-date-year {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.feed-card {
+  overflow: hidden;
+  border: 1px solid rgba(47, 42, 38, 0.08);
+  border-radius: 32px;
+  background: rgba(251, 247, 242, 0.94);
+  box-shadow: 0 14px 34px rgba(47, 42, 38, 0.04);
+}
+
+.feed-entry-current .feed-card {
+  border-color: rgba(181, 110, 77, 0.24);
+  box-shadow: 0 18px 42px rgba(181, 110, 77, 0.09);
+}
+
+.feed-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+}
+
+.feed-badge,
+.feed-location {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.feed-badge {
+  padding: 5px 10px;
+  border: 1px solid rgba(47, 42, 38, 0.1);
+  color: var(--muted);
+}
+
+.feed-badge-audio {
+  color: var(--terracotta);
+  background: rgba(181, 110, 77, 0.08);
+}
+
+.feed-badge-photo {
+  color: var(--sage);
+  background: rgba(126, 144, 120, 0.1);
+}
+
+.feed-badge-text {
+  color: var(--deep-blue);
+  background: rgba(66, 85, 107, 0.08);
+}
+
+.feed-badge-still {
+  color: var(--muted);
+  background: rgba(47, 42, 38, 0.05);
+}
+
+.feed-location {
+  gap: 8px;
+  color: var(--muted);
+}
+
+.location-pulse {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: var(--terracotta);
+  box-shadow: 0 0 0 rgba(181, 110, 77, 0.45);
+  animation: pulse-location 1.8s infinite;
+}
+
+@keyframes pulse-location {
+  0% {
+    box-shadow: 0 0 0 0 rgba(181, 110, 77, 0.45);
+  }
+
+  70% {
+    box-shadow: 0 0 0 9px rgba(181, 110, 77, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(181, 110, 77, 0);
+  }
+}
+
+.feed-gallery {
+  display: grid;
+  gap: 10px;
+  padding: 0 22px;
+}
+
+.feed-main-image,
+.feed-thumb {
+  overflow: hidden;
+  border-radius: 22px;
+  background: var(--surface-strong);
+}
+
+.feed-main-image {
+  height: 360px;
+}
+
+.feed-thumb-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.feed-thumb {
+  height: 120px;
+}
+
+.feed-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.feed-content {
+  padding: 24px 28px 30px;
+}
+
+.feed-current-label {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+
+.feed-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  line-height: 0.98;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.feed-title a:hover {
+  color: var(--terracotta);
+}
+
+.feed-excerpt {
+  max-width: 54ch;
+  margin: 18px 0 0;
+  font-size: 1.04rem;
+  line-height: 1.9;
+  color: rgba(47, 42, 38, 0.86);
+}
+
+.feed-audio-note {
+  margin: 18px 0 0;
+  color: var(--terracotta);
+  font-size: 0.95rem;
+}
+
+.feed-read-link {
+  display: inline-block;
+  margin-top: 22px;
+  color: var(--deep-blue);
+  font-weight: 500;
+  border-bottom: 1px solid rgba(66, 85, 107, 0.3);
+}
+
+.feed-read-link:hover {
+  color: var(--terracotta);
+  border-bottom-color: rgba(181, 110, 77, 0.45);
+}
+
+.feed-entry-silent .feed-card {
+  background: rgba(251, 247, 242, 0.78);
+}
+
+.feed-entry-silent .feed-gallery {
+  display: none;
+}
+
+.feed-entry-silent .feed-title {
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+}
+
+.feed-entry-silent .feed-excerpt {
+  font-style: italic;
+  color: var(--muted);
+}
+
+
 @media (max-width: 700px) {
   .audio-player-main {
     grid-template-columns: 1fr;
@@ -900,6 +1122,36 @@ img {
 
   .audio-time-row {
     grid-template-columns: 48px 1fr 48px;
+  }
+
+  .feed-entry {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .feed-date {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding-top: 0;
+    text-align: left;
+  }
+
+  .feed-date-day {
+    font-size: 1.6rem;
+  }
+
+  .feed-main-image {
+    height: 260px;
+  }
+
+  .feed-thumb {
+    height: 92px;
+  }
+
+  .feed-card-top {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
 }

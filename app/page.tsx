@@ -4,6 +4,7 @@ import MapSection from "../components/MapSection";
 import { client } from "../sanity/lib/client";
 import { POSTS_QUERY, MAP_POSTS_QUERY } from "../sanity/lib/queries";
 import type { Post, MapPost } from "../sanity/lib/types";
+import PostCard from "../components/PostCard";
 
 type SanityImage = {
   asset?: {
@@ -55,72 +56,11 @@ export default async function Home() {
 
         <div className="feed">
           {posts.map((post) => (
-            <article
+            <PostCard
               key={post._id}
-              id={`post-${post._id}`}
-              className={`post-card ${post.kind === "still" ? "post-card-still" : ""
-                } ${currentPost && post._id === currentPost._id ? "post-card-current" : ""}`}
-            >
-              {post.images?.[0]?.asset?.url && (
-                <div>
-                  <div className="post-image-wrap">
-                    <Image
-                      src={post.images[0].asset.url}
-                      alt={post.title}
-                      width={1200}
-                      height={800}
-                      className="post-image"
-                    />
-                  </div>
-
-                  {post.images.length > 1 && (
-                    <div className="post-thumbs">
-                      {post.images.slice(1, 4).map((img, index) => (
-                        <div key={index} className="post-thumb-wrap">
-                          {img.asset?.url && (
-                            <Image
-                              src={img.asset.url}
-                              alt={`${post.title} ${index + 2}`}
-                              width={300}
-                              height={220}
-                              className="post-thumb"
-                            />
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <div>
-                <div className="post-topline">
-                  {post.kind && (
-                    <span className={`post-kind post-kind-${post.kind}`}>
-                      {kindLabels[post.kind] ?? "Beitrag"}
-                    </span>
-                  )}
-
-                  <p className="post-meta">
-                    {post.location} · {post.date}
-                  </p>
-                </div>
-
-                {currentPost && post._id === currentPost._id && (
-                  <div className="current-label">Aktueller Standort</div>
-                )}
-
-                <h3 className="post-title">
-                  <Link href={`/posts/${post.slug}`}>{post.title}</Link>
-                </h3>
-
-                <p className="post-excerpt">{post.excerpt}</p>
-
-                <Link href={`/posts/${post.slug}`} className="post-link">
-                  Beitrag lesen
-                </Link>
-              </div>
-            </article>
+              post={post}
+              isCurrentLocation={currentPost && post._id === currentPost._id}
+            />
           ))}
         </div>
       </section>
